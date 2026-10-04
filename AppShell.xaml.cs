@@ -1,10 +1,17 @@
-﻿    public partial class AppShell : Shell
-    {
-        public AppShell()
-        {
-            InitializeComponent();
+﻿    using System;
+    using Microsoft.Maui.Controls;
+    using CalculateurAge.Views;
 
-        // Sans cette ligne, GoToAsync lève une exception "route inconnue"
-        Routing.RegisterRoute(nameof(ResultatPage), typeof(ResultatPage));
+    namespace CalculateurAge
+    {
+        public partial class AppShell : Shell
+        {
+            public AppShell()
+            {
+                InitializeComponent();
+
+                // Sans cette ligne, GoToAsync lève une exception "route inconnue"
+                Routing.RegisterRoute(nameof(ResultatPage), typeof(ResultatPage));
+            }
+        }
     }
-}
