@@ -1,16 +1,14 @@
 ﻿namespace CalculateurAge.ViewModels;
 
-// Contient l'ETAT de l'écran et les ACTIONS possibles
 public class CalculateurViewModel : BaseViewModel
 {
-    // Champs privés : la vraie donnée
     private string _nom = "";
     private DateTime? _dateNaissance = DateTime.Today.AddYears(-20);
     private string _resultat = "";
     private bool _resultatVisible;
     private string _message = "";
+    private string _erreur = "";
 
-    // Propriétés publiques : ce que le XAML voit
     public string Nom
     {
         get => _nom;
@@ -38,31 +36,66 @@ public class CalculateurViewModel : BaseViewModel
         get => _resultatVisible;
         set => SetField(ref _resultatVisible, value);
     }
+
     public string Message
     {
         get => _message;
         set => SetField(ref _message, value);
     }
-    // Lié à Button.Command dans le XAML
+
+    public string Erreur
+    {
+        get => _erreur;
+        set
+        {
+            if (SetField(ref _erreur, value))
+                OnPropertyChanged(nameof(ErreurVisible));
+        }
+    }
+
+    public bool ErreurVisible => !string.IsNullOrEmpty(Erreur);
+
     public RelayCommand CalculerCommand { get; }
+    public RelayCommand EffacerCommand { get; }
 
     public CalculateurViewModel()
     {
         CalculerCommand = new RelayCommand(
             Calculer,
             () => !string.IsNullOrWhiteSpace(Nom));
+
+        EffacerCommand = new RelayCommand(Effacer);
     }
 
-    // La logique métier : aucun contrôle d'interface ici
     private void Calculer()
     {
         DateTime naissance = DateNaissance ?? DateTime.Today;
-        int age = DateTime.Today.Year - naissance.Year;
 
+        Erreur = "";
+        if (naissance.Date > DateTime.Today)
+        {
+            Erreur = "La date de naissance ne peut pas être dans le futur.";
+            Resultat = "";
+            Message = "";
+            ResultatVisible = false;
+            return;
+        }
+
+        int age = DateTime.Today.Year - naissance.Year;
         if (naissance.Date > DateTime.Today.AddYears(-age)) age--;
 
         Resultat = $"{Nom}, vous avez {age} ans";
         Message = age >= 18 ? "Majeur" : "Mineur";
         ResultatVisible = true;
+    }
+
+    private void Effacer()
+    {
+        Nom = "";
+        DateNaissance = DateTime.Today.AddYears(-20);
+        Resultat = "";
+        Message = "";
+        Erreur = "";
+        ResultatVisible = false;
     }
 }
