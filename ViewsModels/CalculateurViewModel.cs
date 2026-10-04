@@ -63,7 +63,6 @@ public class CalculateurViewModel : BaseViewModel
         CalculerCommand = new RelayCommand(
             Calculer,
             () => !string.IsNullOrWhiteSpace(Nom));
-
         EffacerCommand = new RelayCommand(Effacer);
     }
 
