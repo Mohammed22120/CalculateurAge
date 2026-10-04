@@ -14,7 +14,6 @@ public partial class MainPage : ContentPage
         // Validation : on refuse un nom vide
         if (string.IsNullOrWhiteSpace(entryNom.Text))
         {
-            await DisplayAlert("Erreur", "Entrez un nom", "OK");
             return;
         }
 
@@ -24,8 +23,5 @@ public partial class MainPage : ContentPage
         // Si l'anniversaire n'est pas encore passé cette année, on retire un an
         if (d.Date > DateTime.Today.AddYears(-age)) age--;
 
-        // Navigation vers la page résultat avec paramètres dans l'URL
-        await Shell.Current.GoToAsync(
-            $"{nameof(ResultatPage)}?nom={Uri.EscapeDataString(entryNom.Text)}&age={age}");
     }
 }
