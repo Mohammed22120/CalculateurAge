@@ -8,6 +8,7 @@ public class CalculateurViewModel : BaseViewModel
     private DateTime? _dateNaissance = DateTime.Today.AddYears(-20);
     private string _resultat = "";
     private bool _resultatVisible;
+    private string _message = "";
 
     // Propriétés publiques : ce que le XAML voit
     public string Nom
@@ -37,7 +38,11 @@ public class CalculateurViewModel : BaseViewModel
         get => _resultatVisible;
         set => SetField(ref _resultatVisible, value);
     }
-
+    public string Message
+    {
+        get => _message;
+        set => SetField(ref _message, value);
+    }
     // Lié à Button.Command dans le XAML
     public RelayCommand CalculerCommand { get; }
 
@@ -57,6 +62,7 @@ public class CalculateurViewModel : BaseViewModel
         if (naissance.Date > DateTime.Today.AddYears(-age)) age--;
 
         Resultat = $"{Nom}, vous avez {age} ans";
+        Message = age >= 18 ? "Majeur" : "Mineur";
         ResultatVisible = true;
     }
 }
